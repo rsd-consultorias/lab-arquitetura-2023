@@ -1,0 +1,19 @@
+{
+  "name": "rsd-app-core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/src/index.js",
+  "scripts": {
+    "build": "tsc --target ES5 --experimentalDecorators --declaration",
+    "test": "mocha -r ts-node/register tests/**/*.spec.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.1"
+  }
+}

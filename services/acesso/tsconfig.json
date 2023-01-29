@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "stripInternal": true,
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "target": "esnext",
+    "baseUrl": ".",
+    "outDir": "dist",
+    "paths": {
+      "app-core": ["./src/index"],
+      // "app-core/services": ["./src/services/index"],
+      // "app-core/interfaces": ["./src/interfaces/index"],
+      // "app-core/models": ["./src/models/index"],
+      // "app-core/types": ["./src/types/index"],
+    }
+  },
+  "include": ["src"]
+}

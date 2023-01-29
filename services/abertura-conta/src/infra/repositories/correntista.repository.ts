@@ -1,0 +1,88 @@
+import { ICorrentistaRepository } from "rsd-app-core/interfaces/correntista.repository"
+import { Correntista } from "rsd-app-core/models/correntista.model"
+import { RepositoryResponse } from "rsd-app-core/types/repository.response"
+import { randomUUID } from 'crypto'
+import { DataTypes, Model, ModelCtor, Sequelize } from "sequelize"
+
+export class CorrentistaRepository implements ICorrentistaRepository {
+    private repository: ModelCtor<Model<any, any>>
+
+    constructor(private sequelize: Sequelize) {
+        this.repository = this.sequelize.define('Correntistas', {
+            id: {
+                type: DataTypes.UUIDV4,
+                primaryKey: true
+            },
+            nome: {
+                type: DataTypes.STRING(256),
+                allowNull: false,
+            },
+            cpf: {
+                type: DataTypes.STRING(11),
+                allowNull: false,
+                // unique: true
+            },
+            dataNascimento: {
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            score: DataTypes.INTEGER,
+            matricula: {
+                type: DataTypes.STRING(6),
+                // unique: true
+            }
+        }, {
+            paranoid: true
+        })
+    }
+
+    async inserirCorrentistaAsync(correntista: Correntista): Promise<RepositoryResponse<Correntista>> {
+        try {
+            correntista.id = randomUUID()
+            await this.repository.create({
+                id: correntista.id,
+                nome: correntista.nome,
+                cpf: correntista.cpf,
+                dataNascimento: correntista.dataNascimento,
+                score: correntista.score,
+                matricula: correntista.matricula
+            })
+            return { success: true, data: correntista }
+        } catch (error) {
+            return { success: false, data: correntista, messagens: [`NÃO FOI POSSÍVEL GRAVAR O REGISTRO: [${error}]`] }
+        }
+    }
+
+    alterarCorrentistaAsync(correntista: Correntista): Promise<RepositoryResponse<Correntista>> {
+        throw new Error("Method not implemented.")
+    }
+
+    excluirCorrentistaById(id: string): Promise<RepositoryResponse<Correntista>> {
+        throw new Error("Method not implemented.")
+    }
+
+    async buscarTodos(...arg: any[]): Promise<Correntista[]> {
+        let result: Correntista[] = []
+        let found = await this.repository.findAll({
+            attributes: ['id', 'matricula', 'cpf', 'nome', 'dataNascimento', 'score'],
+            order: [['nome', 'ASC']]
+        })
+
+        found.forEach((item: any) => {
+            result.push({
+                id: item.id,
+                nome: item.nome,
+                cpf: item.cpf,
+                dataNascimento: item.dataNascimento,
+                matricula: item.matricula,
+                score: item.score
+            })
+        })
+
+        return result
+    }
+
+    buscarPorCpf(id: string): Promise<Correntista> {
+        throw new Error("Method not implemented.")
+    }
+}
