@@ -1,7 +1,7 @@
 import { IAnaliseScoreContract } from "../interfaces/analise-score.service.contract"
 
 export class AnaliseScoreDomain {
-    constructor(private analiseScoreContract: IAnaliseScoreContract) {}
+    constructor(readonly analiseScoreContract: IAnaliseScoreContract) {}
 
     analisar(props: {cpf: string, dataNascimento: Date}) : number {
 

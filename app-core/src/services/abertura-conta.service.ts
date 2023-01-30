@@ -11,9 +11,9 @@ export class AberturaContaService {
     private _analiseScoreDomain: AnaliseScoreDomain
 
     constructor(
-        private _correntistaRepository: ICorrentistaRepository,
-        private _contaCorrenteRepository: IContaCorrenteRepository,
-        private _analiseScoreContract: IAnaliseScoreContract) {
+        readonly _correntistaRepository: ICorrentistaRepository,
+        readonly _contaCorrenteRepository: IContaCorrenteRepository,
+        readonly _analiseScoreContract: IAnaliseScoreContract) {
         this._analiseScoreDomain = new AnaliseScoreDomain(this._analiseScoreContract)
     }
 

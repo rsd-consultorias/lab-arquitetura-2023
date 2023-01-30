@@ -7,7 +7,7 @@ import { CorrentistaRepository } from "./infra/repositories/correntista.reposito
 import { PubSub } from "./infra/services/message-broker.service"
 import SerasaService from "./infra/services/serasa.service"
 
-function init() {
+export function initServer() {
     const sequelize = new Sequelize({
         dialect: 'sqlite',
         storage: '../../labdb',
@@ -25,7 +25,7 @@ function init() {
     messageBroker.subscribe('fila-1', (data) => { console.log(`${new Date().toUTCString()} sub 1 ${JSON.stringify(data)}`) })
     messageBroker.subscribe('fila-1', (data) => { console.log(`${new Date().toUTCString()}sub 2 ${JSON.stringify(data)}`) })
 
-    for (let i = 0; i < 100; i++)
+    for (let i = 0; i < 5; i++)
         messageBroker.publish('fila-1', { data: `teste fila ${i}` })
 
     // Express
@@ -69,4 +69,4 @@ function init() {
     })
 }
 
-init()
+initServer()
