@@ -3,8 +3,10 @@ import { gerarMatricula } from "../domain-services/matricula.domain"
 import { IAnaliseScoreContract } from "../interfaces/analise-score.service.contract"
 import { IContaCorrenteRepository } from "../interfaces/conta-corrente.repository"
 import { ICorrentistaRepository } from "../interfaces/correntista.repository"
+import { ContaCorrente } from "../models/conta-corrente.model"
 import { Correntista } from "../models/correntista.model"
 import { MENSAGENS_PADRAO } from "../types/constants"
+import { RepositoryResponse } from "../types/repository.response"
 import { makeCorrentistaFromProps } from "../utils/factories"
 
 export class AberturaContaService {
@@ -17,13 +19,7 @@ export class AberturaContaService {
         this._analiseScoreDomain = new AnaliseScoreDomain(this._analiseScoreContract)
     }
 
-    async cadastrarCorrentistaAsync(props: {
-        nome: string,
-        cpf: string,
-        dataNascimento: Date
-    }): Promise<{
-        dados: Correntista, mensagem?: string
-    }> {
+    async cadastrarCorrentistaAsync(props: { nome: string, cpf: string, dataNascimento: Date }): Promise<{ dados: Correntista, mensagem?: string }> {
         let correntista: Correntista = makeCorrentistaFromProps(props)
         correntista.matricula = gerarMatricula(props.cpf)
         correntista.score = this._analiseScoreDomain.analisar(props)
@@ -38,12 +34,18 @@ export class AberturaContaService {
             return { dados: correntista, mensagem: correntistaCriado.messagens?.pop() }
         }
 
-        const contaCorrente = await this._contaCorrenteRepository.inserir(
-            { agencia: '0001', conta: correntista.matricula!, idCorrentista: correntistaCriado.data?.id! })
-        if (!contaCorrente.success) {
-            return { dados: correntista, mensagem: contaCorrente.messagens?.pop() }
-        }
+        return await this.agendarCriacaoDaContaCorrente(correntista.matricula, correntistaCriado.data?.id!)
+    }
 
-        return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0002 }
+    async agendarCriacaoDaContaCorrente(props: { matricula: string, idCorrentista: string }): Promise<any> {
+        const contaCorrente = await this._contaCorrenteRepository.inserir(
+            { agencia: '0001', conta: props.matricula, idCorrentista: props.idCorrentista })
+        if (!contaCorrente.success) {
+            return { mensagem: contaCorrente.messagens?.pop() }
+        }
+    }
+
+    async listarContas(): Promise<RepositoryResponse<ContaCorrente[]>> {
+        return await this._contaCorrenteRepository.listarTodas()
     }
 }

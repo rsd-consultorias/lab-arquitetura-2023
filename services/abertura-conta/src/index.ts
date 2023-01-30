@@ -1,23 +1,25 @@
-import cors from "cors"
-import express, { Request, Response } from "express"
 import { AberturaContaService } from 'rsd-app-core/services/abertura-conta.service'
 import { Sequelize } from "sequelize"
+import { AberturaContaController } from "./controller/abertura-contar.controller"
+import { ExpressHttpServerAdapter } from "./express.http-server.adapter"
 import { ContaCorrenteRepository } from "./infra/repositories/conta-corrente.repository"
 import { CorrentistaRepository } from "./infra/repositories/correntista.repository"
 import { PubSub } from "./infra/services/message-broker.service"
-import SerasaService from "./infra/services/serasa.service"
+import SerasaAdapterService from "./infra/services/serasa.adapter.service"
 
-export function initServer() {
+export function initServer(port: number) {
     const sequelize = new Sequelize({
         dialect: 'sqlite',
         storage: '../../labdb',
         logging: false
     })
+
     sequelize?.sync()
 
+    // Dependencias
     let correntistaRepository: CorrentistaRepository = new CorrentistaRepository(sequelize)
     let contaCorrenteRepository: ContaCorrenteRepository = new ContaCorrenteRepository(sequelize)
-    let serasaService: SerasaService = new SerasaService()
+    let serasaService: SerasaAdapterService = new SerasaAdapterService()
     let correntistaService: AberturaContaService = new AberturaContaService(correntistaRepository, contaCorrenteRepository, serasaService)
 
     // Message broker
@@ -28,45 +30,14 @@ export function initServer() {
     for (let i = 0; i < 5; i++)
         messageBroker.publish('fila-1', { data: `teste fila ${i}` })
 
-    // Express
-    const API_PORTA = process.env.API_PORTA! || 4201
-    const API_VERSAO = 'v1'
+    // HttpServer
+    const httpServer = new ExpressHttpServerAdapter()
 
-    const corsOptions = {
-        origin: [
-            'http://localhost:4200',
-        ]
-    }
-
-    const app = express()
-    app.use(cors(corsOptions))
-    app.use(express.json({ limit: '1mb' }))
-    app.use(express.urlencoded({ limit: '1mb', extended: true }))
-    app.set('trust proxy', true)
-
-    app.post(`/api/${API_VERSAO}/`, async (req: Request, res: Response) => {
-        try {
-            res.json(
-                await correntistaService.cadastrarCorrentistaAsync(req.body)
-            )
-        } catch (error) {
-            res.json({ success: false, mensagem: 'ERRO DE SISTEMA' })
-        }
-    })
-
-    app.get(`/api/${API_VERSAO}/`, async (req: Request, res: Response) => {
-        res.json({
-            correntistas: await correntistaRepository.buscarTodos({}),
-            contas: await contaCorrenteRepository.listarTodas()
-        })
-    })
+    // Registrar controllers
+    new AberturaContaController(httpServer, correntistaService)
 
     // Listener
-    app.listen(API_PORTA, async () => {
-
-        console.log(`${new Date().toISOString()} Escutando porta ${API_PORTA}`)
-        console.log(`${new Date().toISOString()} Ambiente ${process.env.NODE_ENV || 'development'}`)
-    })
+    httpServer.listen(port)
 }
 
-initServer()
+initServer(Number(process.env.API_PORTA!) || 4201)

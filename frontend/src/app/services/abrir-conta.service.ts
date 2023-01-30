@@ -12,6 +12,6 @@ export class AbrirContaService {
 
   enviarDados(props: { nome: string, cpf: string, dataNascimento: Date }): Observable<any> {
     // Chamar api
-    return this.httpClient.post('http://localhost:4201/api/v1', props)
+    return this.httpClient.post('http://localhost:4201/api/v1/abertura-conta', props)
   }
 }

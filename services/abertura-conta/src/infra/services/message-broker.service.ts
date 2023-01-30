@@ -108,7 +108,7 @@ export class PubSub {
                     })
                 }
             }
-        }, 3000)
+        }, 60000)
     }
 
     subscribe(event: string, fn: (data: any) => void) {

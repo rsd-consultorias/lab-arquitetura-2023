@@ -6,7 +6,7 @@ import { DataTypes, Model, ModelCtor, Sequelize } from "sequelize"
 export class ContaCorrenteRepository implements IContaCorrenteRepository {
     private _repository: ModelCtor<Model<any, any>>
 
-    constructor(private sequelize: Sequelize) {
+    constructor(readonly sequelize: Sequelize) {
         this._repository = this.sequelize.define('ContaCorrente', {
             id: {
                 type: DataTypes.UUIDV4,

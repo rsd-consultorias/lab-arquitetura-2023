@@ -1,6 +1,6 @@
 import { IAnaliseScoreContract } from "rsd-app-core/interfaces/analise-score.service.contract"
 
-export default class SerasaService implements IAnaliseScoreContract {
+export default class SerasaAdapterService implements IAnaliseScoreContract {
     callAnaliseService(cpf: string, dataNascimento: Date, accessKey: string): any {
         if (cpf.endsWith('1')) {
             return { points: 900, cpf: cpf, dataNascimento: dataNascimento, consultaAt: new Date() }

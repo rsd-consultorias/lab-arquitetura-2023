@@ -7,7 +7,7 @@ import { DataTypes, Model, ModelCtor, Sequelize, UniqueConstraintError } from "s
 export class CorrentistaRepository implements ICorrentistaRepository {
     private _repository: ModelCtor<Model<any, any>>
 
-    constructor(private sequelize: Sequelize) {
+    constructor(readonly sequelize: Sequelize) {
         this._repository = this.sequelize.define('Correntistas', {
             id: {
                 type: DataTypes.UUIDV4,
