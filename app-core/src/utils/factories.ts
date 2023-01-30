@@ -11,5 +11,5 @@ export function makeCorrentistaFromProps(props: {
         props.cpf,
         props.dataNascimento,
         props.score
-    )
+    );
 }

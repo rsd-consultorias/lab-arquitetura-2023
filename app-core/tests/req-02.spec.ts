@@ -20,4 +20,4 @@ describe('REQ02 - Análise de Score', () => {
         assert(correntistaScoreBaixo.dados?.score! <= 200, 'Score deve ser menor ou igual 200 para esse cenário')
         assert(correntistaScoreBaixo.mensagem == MENSAGENS_PADRAO.CAD0001, `Mensagem de retorno deve ser ${MENSAGENS_PADRAO.CAD0001}`)
     })
-})
+});

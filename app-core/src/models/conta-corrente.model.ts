@@ -1,4 +1,4 @@
-import { Dinheiro } from "../types/dinheiro.type"
+import { Dinheiro } from "../types/dinheiro.type";
 
 export class ContaCorrente {
 
@@ -9,6 +9,6 @@ export class ContaCorrente {
         public dataAbertura?: Date,
         public saldoAtual?: Dinheiro,
         public status?: string) { 
-            this.status = 'INICIADO'
+            this.status = 'INICIADO';
         }
 }

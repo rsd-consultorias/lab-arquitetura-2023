@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc --target ES5 --experimentalDecorators --declaration",
+    "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -25,6 +26,7 @@
     "sqlite3": "^5.1.4",
     "tslib": "^2.3.0",
     "typedoc": "^0.23.6",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "tslint": "^6.1.3"
   }
 }

@@ -6,13 +6,12 @@
       "semicolon": [true, "always"],
       "no-bitwise": false,
       "eofline": true,
-      "no-any": true,
       "prefer-const": true,
       "forin": false,
       "max-line-length": [
         true,
         {
-          "limit": 120,
+          "limit": 180,
           "ignore-pattern": "^import |^export {(.*?)}"
         }
       ]

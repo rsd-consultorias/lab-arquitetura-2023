@@ -5,6 +5,6 @@ export class RepositoryResponse<T> {
         public data?: T,
         public messagens?: Array<string>) {
 
-        this.messagens = []
+        this.messagens = [];
     }
 }
