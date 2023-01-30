@@ -5,10 +5,10 @@ import { randomUUID } from 'crypto'
 import { DataTypes, Model, ModelCtor, Sequelize, UniqueConstraintError } from "sequelize"
 
 export class CorrentistaRepository implements ICorrentistaRepository {
-    private repository: ModelCtor<Model<any, any>>
+    private _repository: ModelCtor<Model<any, any>>
 
     constructor(private sequelize: Sequelize) {
-        this.repository = this.sequelize.define('Correntistas', {
+        this._repository = this.sequelize.define('Correntistas', {
             id: {
                 type: DataTypes.UUIDV4,
                 primaryKey: true
@@ -39,7 +39,7 @@ export class CorrentistaRepository implements ICorrentistaRepository {
     async inserirCorrentistaAsync(correntista: Correntista): Promise<RepositoryResponse<Correntista>> {
         try {
             correntista.id = randomUUID()
-            await this.repository.create({
+            await this._repository.create({
                 id: correntista.id,
                 nome: correntista.nome,
                 cpf: correntista.cpf,
@@ -49,7 +49,6 @@ export class CorrentistaRepository implements ICorrentistaRepository {
             })
             return { success: true, data: correntista }
         } catch (error: any) {
-            console.log(JSON.stringify(error))
             if (error.name! === 'SequelizeUniqueConstraintError') {
                 return { success: false, data: correntista, messagens: [`NÃO FOI POSSÍVEL GRAVAR O REGISTRO: ${(error as UniqueConstraintError).errors[0].message}`] }
             }
@@ -67,7 +66,7 @@ export class CorrentistaRepository implements ICorrentistaRepository {
 
     async buscarTodos(...arg: any[]): Promise<Correntista[]> {
         let result: Correntista[] = []
-        let found = await this.repository.findAll({
+        let found = await this._repository.findAll({
             attributes: ['id', 'matricula', 'cpf', 'nome', 'dataNascimento', 'score'],
             order: [['nome', 'ASC']]
         })

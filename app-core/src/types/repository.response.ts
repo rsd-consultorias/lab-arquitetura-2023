@@ -1,5 +1,10 @@
 export class RepositoryResponse<T> {
-    success?: boolean
-    data?: T
-    messagens?: Array<string> = []
+
+    constructor(
+        public success?: boolean,
+        public data?: T,
+        public messagens?: Array<string>) {
+
+        this.messagens = []
+    }
 }

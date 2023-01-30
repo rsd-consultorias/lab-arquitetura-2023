@@ -1,4 +1,6 @@
 export class Dinheiro {
-    valor?: number
-    moeda?: string
+
+    constructor(
+        public valor?: number,
+        public moeda?: string) { }
 }

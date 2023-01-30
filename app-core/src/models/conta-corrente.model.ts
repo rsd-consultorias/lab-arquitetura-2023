@@ -1,9 +1,11 @@
 import { Dinheiro } from "../types/dinheiro.type"
 
 export class ContaCorrente {
-    agencia?: string
-    numero?: string
-    ativa?: boolean
-    dataAbertura?: Date
-    saldoAtual?: Dinheiro
+
+    constructor(
+        public agencia?: string,
+        public numero?: string,
+        public ativa?: boolean,
+        public dataAbertura?: Date,
+        public saldoAtual?: Dinheiro) { }
 }

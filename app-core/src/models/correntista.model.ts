@@ -1,8 +1,10 @@
 export class Correntista {
-    id?: string
-    matricula?: string
-    nome?: string
-    cpf?: string
-    dataNascimento?: Date
-    score?: number
+
+    constructor(
+        public id?: string,
+        public matricula?: string,
+        public nome?: string,
+        public cpf?: string,
+        public dataNascimento?: Date,
+        public score?: number) { }
 }

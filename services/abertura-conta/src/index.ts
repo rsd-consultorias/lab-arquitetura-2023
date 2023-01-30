@@ -8,7 +8,8 @@ import SerasaService from "./infra/services/serasa.service"
 
 export const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: '../../labdb'
+    storage: '../../labdb',
+    logging: false
 })
 sequelize?.sync()
 
@@ -48,14 +49,6 @@ app.get(`/api/${API_VERSAO}/`, async (req: Request, res: Response) => {
         correntistas: await correntistaRepository.buscarTodos({}),
         contas: await contaCorrenteRepository.listarTodas()
     })
-})
-
-app.get(`/api/${API_VERSAO}/:cpf`, async (req: Request, res: Response) => {
-    res.json(await correntistaService.cadastrarCorrentistaAsync({
-        nome: 'Fulano de Tal',
-        cpf: req.params.cpf,
-        dataNascimento: new Date(1984, 7, 8)
-    }))
 })
 
 // Listener

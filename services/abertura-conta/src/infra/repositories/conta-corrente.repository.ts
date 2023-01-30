@@ -4,10 +4,10 @@ import { RepositoryResponse } from "rsd-app-core/types/repository.response"
 import { DataTypes, Model, ModelCtor, Sequelize } from "sequelize"
 
 export class ContaCorrenteRepository implements IContaCorrenteRepository {
-    private repository: ModelCtor<Model<any, any>>
+    private _repository: ModelCtor<Model<any, any>>
 
     constructor(private sequelize: Sequelize) {
-        this.repository = this.sequelize.define('ContaCorrente', {
+        this._repository = this.sequelize.define('ContaCorrente', {
             id: {
                 type: DataTypes.UUIDV4,
                 primaryKey: true
@@ -37,7 +37,7 @@ export class ContaCorrenteRepository implements IContaCorrenteRepository {
 
     async inserir(props: { agencia: string, conta: string ,idCorrentista: string }): Promise<RepositoryResponse<any>> {
         try {
-            await this.repository.create({
+            await this._repository.create({
                 id: randomUUID(),
                 id_correntista: props.idCorrentista,
                 agencia: props.agencia,
@@ -52,6 +52,6 @@ export class ContaCorrenteRepository implements IContaCorrenteRepository {
     }
 
     async listarTodas(): Promise<RepositoryResponse<any[]>> {
-        return { success: true, data: await this.repository.findAll() }
+        return { success: true, data: await this._repository.findAll() }
     }
 }
