@@ -13,6 +13,7 @@
       "dom"
     ],
     "target": "esnext",
+    "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {

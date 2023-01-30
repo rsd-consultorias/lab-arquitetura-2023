@@ -63,3 +63,73 @@ export class MessageBroker<T> extends EventEmitter {
         this.pendingMessages = {}
     }
 }
+
+export class MyMessageBroker extends EventEmitter {
+
+    queue: Array<any> = []
+
+    constructor() {
+        super()
+
+        setInterval(async () => {
+            if (this.queue.length > 0) {
+                setTimeout(async () => {
+                    this.process(this.queue.pop())
+                }, 3000)
+            }
+        }, 3000)
+    }
+
+    send(msg: any) {
+        this.emit('send', msg)
+        this.queue.push(msg)
+    }
+
+    receive(queue: any) {
+        this.emit('receive', queue)
+    }
+
+    process(msg: any) {
+        this.emit('process', msg)
+    }
+}
+
+export class PubSub {
+    private subscribers: any = {}
+    private events: Array<any> = []
+
+    constructor() {
+        setInterval(async () => {
+            if (this.events.length > 0) {
+                let event = this.events.reverse().pop()
+                if (Array.isArray(this.subscribers[event.event])) {
+                    this.subscribers[event.event].forEach((sub: any) => {
+                        sub(event.data)
+                    })
+                }
+            }
+        }, 3000)
+    }
+
+    subscribe(event: string, fn: (data: any) => void) {
+        if (Array.isArray(this.subscribers[event])) {
+            this.subscribers[event] = [...this.subscribers[event], fn]
+        } else {
+            this.subscribers[event] = [fn]
+        }
+        return () => {
+            this.unsubscribe(event, fn)
+        }
+    }
+
+    unsubscribe(event: string, fn: (data: any) => void) {
+        this.subscribers[event] = this.subscribers[event].filter(
+            (sub: any) => sub !== fn
+        )
+    }
+
+    publish(event: string, data: any) {
+        this.events.push({ event: event, data: data })
+        return true
+    }
+}

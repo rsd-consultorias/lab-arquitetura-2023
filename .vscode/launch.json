@@ -1,0 +1,29 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "SVC - Abertura de Contas",
+      "program": "${workspaceFolder}/services/abertura-conta/src/index.ts",
+      "preLaunchTask": "tsc --target ES5 --experimentalDecorators --declaration",
+      "outFiles": [
+        "${workspaceFolder}/services/abertura-conta/dist/**/*.js"
+      ],
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "svc-teste-2",
+      "program": "${workspaceFolder}/svc-teste-2/src/main.ts",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": [
+        "${workspaceFolder}/svc-teste-2/out/**/*.js"
+      ]
+    }
+  ]
+}

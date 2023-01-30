@@ -4,6 +4,7 @@ import { AberturaContaService } from 'rsd-app-core/services/abertura-conta.servi
 import { Sequelize } from "sequelize"
 import { ContaCorrenteRepository } from "./infra/repositories/conta-corrente.repository"
 import { CorrentistaRepository } from "./infra/repositories/correntista.repository"
+import { MessageBroker, MyMessageBroker, PubSub } from "./infra/services/message-broker.service"
 import SerasaService from "./infra/services/serasa.service"
 
 export const sequelize = new Sequelize({
@@ -17,6 +18,16 @@ let correntistaRepository: CorrentistaRepository = new CorrentistaRepository(seq
 let contaCorrenteRepository: ContaCorrenteRepository = new ContaCorrenteRepository(sequelize)
 let serasaService: SerasaService = new SerasaService()
 let correntistaService: AberturaContaService = new AberturaContaService(correntistaRepository, contaCorrenteRepository, serasaService)
+
+// Message broker
+let messageBroker = new PubSub()
+messageBroker.subscribe('fila-1', (data) => { console.log(`${new Date().toUTCString()} sub 1 ${JSON.stringify(data)}`) })
+messageBroker.subscribe('fila-1', (data) => { console.log(`${new Date().toUTCString()}sub 2 ${JSON.stringify(data)}`) })
+
+for (let i = 0; i < 100; i++)
+    messageBroker.publish('fila-1', { data: `teste fila ${i}` })
+
+
 
 // Express
 const API_PORTA = process.env.API_PORTA! || 4201

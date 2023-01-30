@@ -7,5 +7,8 @@ export class ContaCorrente {
         public numero?: string,
         public ativa?: boolean,
         public dataAbertura?: Date,
-        public saldoAtual?: Dinheiro) { }
+        public saldoAtual?: Dinheiro,
+        public status?: string) { 
+            this.status = 'INICIADO'
+        }
 }

@@ -29,13 +29,26 @@ export class ContaCorrenteRepository implements IContaCorrenteRepository {
                 type: DataTypes.DATE,
                 allowNull: false
             },
-            saldoAtual: DataTypes.INTEGER
+            saldoAtual: DataTypes.INTEGER,
+            moeda: DataTypes.CHAR(3)
         }, {
             paranoid: true
         })
     }
 
-    async inserir(props: { agencia: string, conta: string ,idCorrentista: string }): Promise<RepositoryResponse<any>> {
+    async inserir(props: { agencia: string, conta: string, idCorrentista: string }): Promise<RepositoryResponse<any>> {
+        setTimeout(async () => {
+            await this._repository.create({
+                id: randomUUID(),
+                id_correntista: props.idCorrentista,
+                agencia: props.agencia,
+                conta: props.conta,
+                dataAbertura: new Date(),
+                saldoAtual: 0
+            })
+        }, 5000)
+
+        return { success: false, data: props, messagens: [`CONTA AGUARDANDO FINALIZAR A CRIAÇÃO.`] }
         try {
             await this._repository.create({
                 id: randomUUID(),
