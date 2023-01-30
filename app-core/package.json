@@ -5,6 +5,7 @@
   "main": "./dist/src/index.js",
   "scripts": {
     "build": "tsc --target ES5 --experimentalDecorators --declaration",
+    "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
     "test": "mocha -r ts-node/register tests/**/*.spec.ts"
   },
   "author": "",
@@ -14,6 +15,7 @@
     "@types/mocha": "^10.0.1",
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "tslint": "^6.1.3"
   }
 }

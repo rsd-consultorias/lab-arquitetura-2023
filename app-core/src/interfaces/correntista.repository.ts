@@ -6,6 +6,6 @@ export interface ICorrentistaRepository {
     alterarCorrentistaAsync(correntista: Correntista): Promise<RepositoryResponse<Correntista>>
     excluirCorrentistaById(id: string): Promise<RepositoryResponse<Correntista>>
 
-    buscarTodos(...arg: any[]): Promise<Array<Correntista>>
+    buscarTodos(...arg: string[]): Promise<Array<Correntista>>
     buscarPorCpf(cpf: string): Promise<Correntista>
 }
