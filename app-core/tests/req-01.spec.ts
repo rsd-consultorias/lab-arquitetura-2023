@@ -16,6 +16,6 @@ describe('REQ-01 - Criação de Conta', () => {
 
     it('Verificar se a matrícula foi criada com 6 caracteres', async () => {
         let correntistaComum: { dados: Correntista, mensagem?: string } = await correntistaService.cadastrarCorrentistaAsync(proponentes.comum)
-        assert(correntistaComum.dados.matricula?.length == 6, 'Matrícula deve ter 6 caracteres')
+        assert(correntistaComum.dados?.matricula!.length == 6, 'Matrícula deve ter 6 caracteres')
     })
 })

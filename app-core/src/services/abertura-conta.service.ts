@@ -19,7 +19,11 @@ export class AberturaContaService {
         this._analiseScoreDomain = new AnaliseScoreDomain(this._analiseScoreContract)
     }
 
-    async cadastrarCorrentistaAsync(props: { nome: string, cpf: string, dataNascimento: Date }): Promise<{ dados: Correntista, mensagem?: string }> {
+    async cadastrarCorrentistaAsync(props: {
+        nome: string,
+        cpf: string,
+        dataNascimento: Date
+    }): Promise<{ dados: Correntista, mensagem?: string }> {
         let correntista: Correntista = makeCorrentistaFromProps(props)
         correntista.matricula = gerarMatricula(props.cpf)
         correntista.score = this._analiseScoreDomain.analisar(props)
@@ -34,15 +38,13 @@ export class AberturaContaService {
             return { dados: correntista, mensagem: correntistaCriado.messagens?.pop() }
         }
 
-        return await this.agendarCriacaoDaContaCorrente(correntista.matricula, correntistaCriado.data?.id!)
-    }
-
-    async agendarCriacaoDaContaCorrente(props: { matricula: string, idCorrentista: string }): Promise<any> {
         const contaCorrente = await this._contaCorrenteRepository.inserir(
-            { agencia: '0001', conta: props.matricula, idCorrentista: props.idCorrentista })
+            { agencia: '0001', conta: correntista.matricula!, idCorrentista: correntistaCriado.data?.id! })
         if (!contaCorrente.success) {
-            return { mensagem: contaCorrente.messagens?.pop() }
+            return { dados: correntista, mensagem: contaCorrente.messagens?.pop() }
         }
+
+        return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0002 }
     }
 
     async listarContas(): Promise<RepositoryResponse<ContaCorrente[]>> {
