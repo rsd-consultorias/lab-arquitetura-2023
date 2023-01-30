@@ -2,7 +2,7 @@ import { ICorrentistaRepository } from "rsd-app-core/interfaces/correntista.repo
 import { Correntista } from "rsd-app-core/models/correntista.model"
 import { RepositoryResponse } from "rsd-app-core/types/repository.response"
 import { randomUUID } from 'crypto'
-import { DataTypes, Model, ModelCtor, Sequelize } from "sequelize"
+import { DataTypes, Model, ModelCtor, Sequelize, UniqueConstraintError } from "sequelize"
 
 export class CorrentistaRepository implements ICorrentistaRepository {
     private repository: ModelCtor<Model<any, any>>
@@ -20,7 +20,7 @@ export class CorrentistaRepository implements ICorrentistaRepository {
             cpf: {
                 type: DataTypes.STRING(11),
                 allowNull: false,
-                // unique: true
+                unique: true
             },
             dataNascimento: {
                 type: DataTypes.DATE,
@@ -29,7 +29,7 @@ export class CorrentistaRepository implements ICorrentistaRepository {
             score: DataTypes.INTEGER,
             matricula: {
                 type: DataTypes.STRING(6),
-                // unique: true
+                unique: true
             }
         }, {
             paranoid: true
@@ -48,7 +48,11 @@ export class CorrentistaRepository implements ICorrentistaRepository {
                 matricula: correntista.matricula
             })
             return { success: true, data: correntista }
-        } catch (error) {
+        } catch (error: any) {
+            console.log(JSON.stringify(error))
+            if (error.name! === 'SequelizeUniqueConstraintError') {
+                return { success: false, data: correntista, messagens: [`NÃO FOI POSSÍVEL GRAVAR O REGISTRO: ${(error as UniqueConstraintError).errors[0].message}`] }
+            }
             return { success: false, data: correntista, messagens: [`NÃO FOI POSSÍVEL GRAVAR O REGISTRO: [${error}]`] }
         }
     }

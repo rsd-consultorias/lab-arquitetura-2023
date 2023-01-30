@@ -34,7 +34,7 @@ export class AberturaContaService {
             return {dados: correntista, mensagem: correntistaCriado.messagens?.pop()}
         }
 
-        let contaCorrente = await this.contaCorrenteRepository.inserir({agencia: '0001', conta: '123456', idCorrentista: correntistaCriado.data?.id!})
+        let contaCorrente = await this.contaCorrenteRepository.inserir({agencia: '0001', conta: correntista.matricula!, idCorrentista: correntistaCriado.data?.id!})
         console.log(contaCorrente)
         if(!contaCorrente.success) {
             return { dados: correntista, mensagem: contaCorrente.messagens?.pop() }

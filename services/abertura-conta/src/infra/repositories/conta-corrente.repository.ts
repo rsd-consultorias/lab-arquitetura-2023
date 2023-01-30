@@ -22,7 +22,8 @@ export class ContaCorrenteRepository implements IContaCorrenteRepository {
             },
             conta: {
                 type: DataTypes.STRING(6),
-                allowNull: false
+                allowNull: false,
+                unique: true
             },
             dataAbertura: {
                 type: DataTypes.DATE,

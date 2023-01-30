@@ -57,6 +57,13 @@ typings/
 # dotenv environment variables file
 .env
 
+# build directories
+build/
+dist/
+
+# sqlite file
+labdb
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
@@ -74,3 +81,4 @@ typings/
 
 # FuseBox cache
 .fusebox/
+labdb

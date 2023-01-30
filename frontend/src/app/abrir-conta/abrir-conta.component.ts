@@ -15,6 +15,10 @@ export class AbrirContaComponent implements OnInit {
   rotateClass = 'bg-1'
   mensagem?: string
 
+  nome?: string
+  cpf?: string
+  dataNascimento?: string
+
   ngOnInit(): void {
 
     let contador = 0;
@@ -28,7 +32,8 @@ export class AbrirContaComponent implements OnInit {
   }
 
   salvar() {
-    this.abrirContaService.enviarDados({nome: 'Teste', cpf: '12345678901', dataNascimento: new Date('1984-01-01')}).subscribe(
+    this.mensagem = ''
+    this.abrirContaService.enviarDados({nome: this.nome!, cpf: this.cpf!, dataNascimento: new Date(this.dataNascimento!)}).subscribe(
       res => {
         this.mensagem = res.mensagem
       }

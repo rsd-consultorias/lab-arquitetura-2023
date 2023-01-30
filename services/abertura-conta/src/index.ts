@@ -34,9 +34,13 @@ app.use(express.urlencoded({ limit: '1mb', extended: true }))
 app.set('trust proxy', true)
 
 app.post(`/api/${API_VERSAO}/`, async (req: Request, res: Response) => {
-    res.json(
-        await correntistaService.cadastrarCorrentistaAsync(req.body)
-    )
+    try {
+        res.json(
+            await correntistaService.cadastrarCorrentistaAsync(req.body)
+        )
+    } catch (error) {
+        res.json({ success: false, mensagem: 'ERRO DE SISTEMA' })
+    }
 })
 
 app.get(`/api/${API_VERSAO}/`, async (req: Request, res: Response) => {
