@@ -2,6 +2,7 @@ import { AnaliseScoreDomain } from "../domain-services/analise-score.domain";
 import { gerarMatricula } from "../domain-services/matricula.domain";
 import { IAnaliseScoreContract } from "../interfaces/analise-score.service.contract";
 import { IContaCorrenteCommand } from "../interfaces/conta-corrente.command";
+import { IContaCorrenteQuery } from "../interfaces/conta-corrente.query";
 import { ICorrentistaCommand } from "../interfaces/correntista.command";
 import { ContaCorrente } from "../models/conta-corrente.model";
 import { Correntista } from "../models/correntista.model";
@@ -15,8 +16,9 @@ export class AberturaContaService {
     constructor(
         readonly correntistaCommand: ICorrentistaCommand,
         readonly contaCorrenteCommand: IContaCorrenteCommand,
-        readonly _analiseScoreContract: IAnaliseScoreContract) {
-        this._analiseScoreDomain = new AnaliseScoreDomain(this._analiseScoreContract);
+        readonly contaCorrenteQuery: IContaCorrenteQuery,
+        readonly analiseScoreContract: IAnaliseScoreContract) {
+        this._analiseScoreDomain = new AnaliseScoreDomain(this.analiseScoreContract);
     }
 
     async gravarDadosFormularioAbertura(props: {
@@ -52,6 +54,6 @@ export class AberturaContaService {
     }
 
     async listarContas(): Promise<CoreResponse<ContaCorrente[]>> {
-        return await this.contaCorrenteCommand.listarTodas();
+        return await this.contaCorrenteQuery.listarTodas();
     }
 }

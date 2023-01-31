@@ -1,5 +1,6 @@
 import { IAnaliseScoreContract } from "../src/interfaces/analise-score.service.contract"
 import { IContaCorrenteCommand } from "../src/interfaces/conta-corrente.command"
+import { IContaCorrenteQuery } from "../src/interfaces/conta-corrente.query"
 import { ICorrentistaCommand } from "../src/interfaces/correntista.command"
 import { ContaCorrente } from "../src/models/conta-corrente.model"
 import { Correntista } from "../src/models/correntista.model"
@@ -56,16 +57,26 @@ export const correntistaCommand: ICorrentistaCommand = {
 export const contaCorrenteCommand: IContaCorrenteCommand = {
     inserir: function (props: {}): Promise<CoreResponse<ContaCorrente>> {
         return new Promise((resolve, reject) => {
-            resolve({success: true, data: props});
+            resolve({ success: true, data: props });
         })
     },
     alterar: function (contaCorrente: ContaCorrente): Promise<CoreResponse<ContaCorrente>> {
         throw new Error("Function not implemented.")
-    },
+    }
+}
+
+export const contaCorrenteQuery: IContaCorrenteQuery = {
     listarTodas: function (): Promise<CoreResponse<ContaCorrente[]>> {
+        throw new Error("Function not implemented.")
+    },
+    buscarPorAgenciaEConta: function (agencia: string, conta: string): Promise<CoreResponse<ContaCorrente>> {
+        throw new Error("Function not implemented.")
+    },
+    buscarPorCpf: function (cpf: string): Promise<CoreResponse<ContaCorrente>> {
         throw new Error("Function not implemented.")
     }
 }
 
 // Instância do serviço
-export var correntistaService: AberturaContaService = new AberturaContaService(correntistaCommand, contaCorrenteCommand, new SerasaScoreService())
+export var correntistaService: AberturaContaService =
+    new AberturaContaService(correntistaCommand, contaCorrenteCommand, contaCorrenteQuery, new SerasaScoreService())

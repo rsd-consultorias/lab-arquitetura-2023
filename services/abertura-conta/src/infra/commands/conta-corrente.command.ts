@@ -18,8 +18,4 @@ export class ContaCorrenteCommand implements IContaCorrenteCommand {
     alterar(contaCorrente: ContaCorrente): Promise<CoreResponse<ContaCorrente>> {
         throw new Error("Method not implemented.");
     }
-
-    async listarTodas(): Promise<CoreResponse<ContaCorrente[]>> {
-        return await this.contaCorrenteRepository.listarTodas();
-    }
 }
