@@ -6,7 +6,7 @@ import { ICorrentistaRepository } from "../interfaces/correntista.repository";
 import { ContaCorrente } from "../models/conta-corrente.model";
 import { Correntista } from "../models/correntista.model";
 import { MENSAGENS_PADRAO } from "../types/constants";
-import { RepositoryResponse } from "../types/repository.response";
+import { CQRSResponse } from "../types/cqrs.response";
 import { makeCorrentistaFromProps } from "../utils/factories";
 
 export class AberturaContaService {
@@ -47,7 +47,7 @@ export class AberturaContaService {
         return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0002 };
     }
 
-    async listarContas(): Promise<RepositoryResponse<ContaCorrente[]>> {
+    async listarContas(): Promise<CQRSResponse<ContaCorrente[]>> {
         return await this._contaCorrenteRepository.listarTodas();
     }
 }

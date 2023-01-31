@@ -3,7 +3,7 @@ import { IContaCorrenteRepository } from "../src/interfaces/conta-corrente.repos
 import { ICorrentistaRepository } from "../src/interfaces/correntista.repository"
 import { Correntista } from "../src/models/correntista.model"
 import { AberturaContaService } from "../src/services/abertura-conta.service"
-import { RepositoryResponse } from "../src/types/repository.response"
+import { CQRSResponse } from "../src/types/cqrs.response"
 
 // parâmentros de entrada
 export const proponentes = {
@@ -44,17 +44,17 @@ export function resetCorrentistas() {
 
 // Mock do repositório
 export const correntistaRepository: ICorrentistaRepository = {
-    inserirCorrentistaAsync: function (correntista: Correntista): Promise<RepositoryResponse<Correntista>> {
+    inserirCorrentistaAsync: function (correntista: Correntista): Promise<CQRSResponse<Correntista>> {
         return new Promise((resolve, reject) => {
             correntistas.push(correntista)
 
             resolve({ success: true, data: correntista })
         })
     },
-    alterarCorrentistaAsync: function (correntista: Correntista): Promise<RepositoryResponse<Correntista>> {
+    alterarCorrentistaAsync: function (correntista: Correntista): Promise<CQRSResponse<Correntista>> {
         throw new Error("Function not implemented.")
     },
-    excluirCorrentistaById: function (id: string): Promise<RepositoryResponse<Correntista>> {
+    excluirCorrentistaById: function (id: string): Promise<CQRSResponse<Correntista>> {
         throw new Error("Function not implemented.")
     },
     buscarTodos: function (props: {}): Promise<Correntista[]> {
@@ -66,12 +66,12 @@ export const correntistaRepository: ICorrentistaRepository = {
 }
 
 export const contaCorrenteRepository: IContaCorrenteRepository = {
-    inserir: function (props: { agencia: string, conta: string, idCorrentista: string }): Promise<RepositoryResponse<any>> {
+    inserir: function (props: { agencia: string, conta: string, idCorrentista: string }): Promise<CQRSResponse<any>> {
         return new Promise((resolve, reject) => {
             resolve({success: true, data: props})
         })
     },
-    listarTodas: function (): Promise<RepositoryResponse<any[]>> {
+    listarTodas: function (): Promise<CQRSResponse<any[]>> {
         throw new Error("Function not implemented.")
     }
 }

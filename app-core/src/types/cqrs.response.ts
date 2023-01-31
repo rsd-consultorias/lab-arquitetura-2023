@@ -1,4 +1,4 @@
-export class RepositoryResponse<T> {
+export class CQRSResponse<T> {
 
     constructor(
         public success?: boolean,

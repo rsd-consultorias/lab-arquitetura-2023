@@ -1,10 +1,10 @@
 import { Correntista } from "../models/correntista.model";
-import { RepositoryResponse } from "../types/repository.response";
+import { CQRSResponse } from "../types/cqrs.response";
 
 export interface ICorrentistaRepository {
-    inserirCorrentistaAsync(correntista: Correntista): Promise<RepositoryResponse<Correntista>>;
-    alterarCorrentistaAsync(correntista: Correntista): Promise<RepositoryResponse<Correntista>>;
-    excluirCorrentistaById(id: string): Promise<RepositoryResponse<Correntista>>;
+    inserirCorrentistaAsync(correntista: Correntista): Promise<CQRSResponse<Correntista>>;
+    alterarCorrentistaAsync(correntista: Correntista): Promise<CQRSResponse<Correntista>>;
+    excluirCorrentistaById(id: string): Promise<CQRSResponse<Correntista>>;
 
     buscarTodos(...arg: string[]): Promise<Array<Correntista>>;
     buscarPorCpf(cpf: string): Promise<Correntista>;
