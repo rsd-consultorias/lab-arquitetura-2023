@@ -22,5 +22,4 @@ export class ContaCorrenteCommand implements IContaCorrenteCommand {
     async listarTodas(): Promise<CoreResponse<ContaCorrente[]>> {
         return await this.contaCorrenteRepository.listarTodas();
     }
-
 }
