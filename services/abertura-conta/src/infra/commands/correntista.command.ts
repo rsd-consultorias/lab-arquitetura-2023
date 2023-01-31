@@ -9,5 +9,4 @@ export class CorrentistaCommand implements ICorrentistaCommand {
     async inserir(correntista: Correntista): Promise<CoreResponse<Correntista>> {
         return await this.correntistaRepository.inserirCorrentistaAsync(correntista);
     }
-
 }

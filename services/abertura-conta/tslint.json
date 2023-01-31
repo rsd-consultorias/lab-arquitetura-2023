@@ -1,7 +1,6 @@
 {
     "rules": {
       "no-unnecessary-class": [true, "allow-empty-class"],
-      "no-use-before-declare": true,
       "no-inferrable-types": true,
       "semicolon": [true, "always"],
       "no-bitwise": false,

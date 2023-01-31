@@ -26,9 +26,9 @@ export class ExpressHttpServerAdapter implements IHttpServer {
     }
 
     listen(port: number): void {
+        this.app.listen(port);
         console.log(`${new Date().toISOString()} Escutando porta ${port}`);
         console.log(`${new Date().toISOString()} Ambiente ${process.env.NODE_ENV || 'development'}`);
-        this.app.listen(port);
     }
 
 }
