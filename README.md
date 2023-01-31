@@ -4,10 +4,9 @@
 ### Cenário fictício
 Para testar as integrações será definido o seguinte cenário de negócio:
 
-- Usuário acessa **site*** do banco para cadastrar uma conta nova;
+- Usuário acessa ***site*** do banco para cadastrar uma conta nova;
 - Após digitar os dados, envia o formulário e os dados deverão ser analisados por um ***serviço externo*** ao site;
-- Após ter os dados analisados e aprovados, o resultado deve ser enviado para ***outro serviço*** que será responsável
-        por finalizar a abertura da conta;
+- Após ter os dados analisados e aprovados, o resultado deve ser enviado para ***outro serviço*** que será responsável por finalizar a abertura da conta;
 - Após finalizar a abertura da conta, deverá ser ***enviado um e-mail*** ao usuário informando a nova conta;
 - Durante o processamento, toda vez que o usuário tentar se cadastrar de novo, deverá exibir uma mensagem informando o ***estado atual do processo***.
 
@@ -42,6 +41,13 @@ rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
 Para terminar os serviço basta tecla CTRL+C nos consoles abertos
 
 ## gRPC
+
+## Comandos úteis
+
+### <b> Parar <i style='color: red'>Mongo DB</i>, pegar o PID e executar kill <PID>
+``` bash
+ps aux | grep -v grep | grep mongod
+```
 
 ## Referências
 [Apache Quick Start](https://kafka.apache.org/quickstart)

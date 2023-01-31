@@ -15,7 +15,7 @@ export class AberturaContaController {
         readonly correntistaQuery: ICorrentistaQuery) {
         this.httpServer.register(this.URL_API, 'post', async (params: ParamsDictionary, body: any) => {
             try {
-                return await this.aberturaContaService.gravarDadosFormularioAbertura(body);
+                return await this.aberturaContaService.iniciarProcesso(body);
             } catch (error) {
                 return { success: false, mensagem: 'ERRO DE SISTEMA' };
             }

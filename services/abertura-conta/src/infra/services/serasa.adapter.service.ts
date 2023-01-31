@@ -32,7 +32,7 @@ export default class SerasaAdapterService implements IAnaliseRiscoService {
                 dataNascimento: request.dataNascimento
             }, (err: any, response: any) => {
                 if (err)
-                    reject(err.message);
+                    resolve({cpf: request.cpf, dataNascimento: request.dataNascimento, nome: '', score: 0});
                 resolve(response);
             });
         })

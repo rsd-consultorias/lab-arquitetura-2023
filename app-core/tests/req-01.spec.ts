@@ -10,7 +10,7 @@ describe('REQ-01 - Criação de Conta', () => {
     });
 
     it('Deve criar um correntista', async () => {
-        let correntistaComum: { dados: Correntista, mensagem?: string } = await correntistaService.gravarDadosFormularioAbertura(proponentes.comum);
+        let correntistaComum: { dados: Correntista, mensagem?: string } = await correntistaService.iniciarProcesso(proponentes.comum);
         assert(correntistaComum.mensagem == MENSAGENS_PADRAO.CAD0002, `Mensagem de retorno deve ser ${MENSAGENS_PADRAO.CAD0002}`);
     });
 });

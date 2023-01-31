@@ -17,7 +17,7 @@ export class AberturaContaService {
         readonly contaCorrenteQuery: IContaCorrenteQuery,
         readonly analiseRiscoService: IAnaliseRiscoService) { }
 
-    async gravarDadosFormularioAbertura(props: {
+    async iniciarProcesso(props: {
         nome: string,
         cpf: string,
         dataNascimento: Date
@@ -31,12 +31,16 @@ export class AberturaContaService {
             return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0004 };
         }
 
-        correntista.score = (await this.analiseRiscoService.analisar({
+        const scoreCalculado = (await this.analiseRiscoService.analisar({
             cpf: correntista.cpf!,
             dataNascimento: correntista.dataNascimento!
-        })).score;
+        }));
 
-        if (correntista.score <= 200) {
+        if (scoreCalculado) {
+            correntista.score = scoreCalculado.score!;
+        }
+
+        if (correntista.score! <= 200) {
             return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0001 };
         }
         const correntistaCriado = (await this.correntistaCommand.inserir(correntista));
