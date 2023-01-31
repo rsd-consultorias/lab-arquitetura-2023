@@ -1,6 +1,7 @@
 import { IContaCorrenteCommand } from 'rsd-app-core/interfaces/conta-corrente.command';
 import { IContaCorrenteQuery } from 'rsd-app-core/interfaces/conta-corrente.query';
 import { ICorrentistaCommand } from 'rsd-app-core/interfaces/correntista.command';
+import { ICorrentistaQuery } from 'rsd-app-core/interfaces/correntista.query';
 import { AberturaContaService } from 'rsd-app-core/services/abertura-conta.service';
 import { Sequelize } from "sequelize";
 import { AberturaContaController } from "./controller/abertura-conta.controller";
@@ -8,12 +9,11 @@ import { ExpressHttpServerAdapter } from "./express.http-server.adapter";
 import { ContaCorrenteCommand } from './infra/commands/conta-corrente.command';
 import { CorrentistaCommand } from './infra/commands/correntista.command';
 import { ContaCorrenteQuery } from './infra/queries/conta-corrente.query';
+import { CorrentistaQuery } from './infra/queries/correntista.query';
 import { ContaCorrenteRepository } from "./infra/repositories/conta-corrente.repository";
 import { CorrentistaRepository } from "./infra/repositories/correntista.repository";
 import { PubSub } from "./infra/services/message-broker.service";
 import SerasaAdapterService from "./infra/services/serasa.adapter.service";
-
-import './infra/rpc/rpc-server';
 
 export function initServer(port: number) {
     const sequelize = new Sequelize({
@@ -32,9 +32,10 @@ export function initServer(port: number) {
     const correntistaCommand: ICorrentistaCommand = new CorrentistaCommand(correntistaRepository);
     const contaCorrenteCommand: IContaCorrenteCommand = new ContaCorrenteCommand(contaCorrenteRepository);
     const contaCorrenteQuery: IContaCorrenteQuery = new ContaCorrenteQuery(contaCorrenteRepository);
+    const correntistaQuery: ICorrentistaQuery = new CorrentistaQuery(correntistaRepository);
     
     const serasaService: SerasaAdapterService = new SerasaAdapterService();
-    const correntistaService: AberturaContaService = new AberturaContaService(correntistaCommand, contaCorrenteCommand, contaCorrenteQuery, serasaService);
+    const correntistaService: AberturaContaService = new AberturaContaService(correntistaCommand, correntistaQuery, contaCorrenteCommand, contaCorrenteQuery, serasaService);
 
     // Message broker
     const messageBroker = new PubSub();
@@ -48,7 +49,7 @@ export function initServer(port: number) {
     const httpServer = new ExpressHttpServerAdapter();
 
     // Registrar controllers
-    new AberturaContaController(httpServer, correntistaService, contaCorrenteQuery);
+    new AberturaContaController(httpServer, correntistaService, contaCorrenteQuery, correntistaQuery);
 
     // Listener
     httpServer.listen(port);

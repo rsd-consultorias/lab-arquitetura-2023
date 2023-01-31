@@ -43,8 +43,7 @@ export class CorrentistaRepository {
                 nome: correntista.nome,
                 cpf: correntista.cpf,
                 dataNascimento: correntista.dataNascimento,
-                score: correntista.score,
-                matricula: correntista.matricula
+                score: correntista.score
             });
             return { success: true, data: correntista };
         } catch (error: any) {
@@ -53,6 +52,15 @@ export class CorrentistaRepository {
             }
             return { success: false, data: correntista, messagens: [`NÃO FOI POSSÍVEL GRAVAR O REGISTRO: [${error}]`] };
         }
+    }
+
+    async buscarPorCpf(cpf: string): Promise<Correntista | undefined> {
+        const found = await this._repository.findOne({
+            where: {
+                cpf: cpf
+            }
+        });
+        return found?.get();
     }
 
     async buscarTodos(...arg: any[]): Promise<Correntista[]> {
@@ -68,7 +76,6 @@ export class CorrentistaRepository {
                 nome: item.nome,
                 cpf: item.cpf,
                 dataNascimento: item.dataNascimento,
-                matricula: item.matricula,
                 score: item.score
             });
         });

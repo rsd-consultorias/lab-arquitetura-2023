@@ -1,24 +1,21 @@
-import { AnaliseScoreDomain } from "../domain-services/analise-score.domain";
-import { IAnaliseScoreContract } from "../interfaces/analise-score.service.contract";
+import { IAnaliseRiscoService } from "../interfaces/analise-risco.service";
 import { IContaCorrenteCommand } from "../interfaces/conta-corrente.command";
 import { IContaCorrenteQuery } from "../interfaces/conta-corrente.query";
 import { ICorrentistaCommand } from "../interfaces/correntista.command";
-import { ContaCorrente } from "../models/conta-corrente.model";
+import { ICorrentistaQuery } from "../interfaces/correntista.query";
 import { Correntista } from "../models/correntista.model";
 import { MENSAGENS_PADRAO } from "../types/constants";
 import { CoreResponse } from "../types/core.response";
 import { makeCorrentistaFromProps } from "../utils/factories";
 
 export class AberturaContaService {
-    private _analiseScoreDomain: AnaliseScoreDomain;
 
     constructor(
         readonly correntistaCommand: ICorrentistaCommand,
+        readonly correntistaQuery: ICorrentistaQuery,
         readonly contaCorrenteCommand: IContaCorrenteCommand,
         readonly contaCorrenteQuery: IContaCorrenteQuery,
-        readonly analiseScoreContract: IAnaliseScoreContract) {
-        this._analiseScoreDomain = new AnaliseScoreDomain(this.analiseScoreContract);
-    }
+        readonly analiseRiscoService: IAnaliseRiscoService) { }
 
     async gravarDadosFormularioAbertura(props: {
         nome: string,
@@ -26,7 +23,18 @@ export class AberturaContaService {
         dataNascimento: Date
     }): Promise<{ dados: Correntista, mensagem?: string }> {
         let correntista: Correntista = makeCorrentistaFromProps(props);
-        correntista.score = this._analiseScoreDomain.analisar(props);
+
+        // Verificar se correntista já existe
+        let correntisaExistente = await this.correntistaQuery.buscarPorCpf(correntista.cpf!);
+
+        if (correntisaExistente.data) {
+            return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0004 };
+        }
+
+        correntista.score = (await this.analiseRiscoService.analisar({
+            cpf: correntista.cpf!,
+            dataNascimento: correntista.dataNascimento!
+        })).score;
 
         if (correntista.score <= 200) {
             return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0001 };
@@ -39,7 +47,7 @@ export class AberturaContaService {
         }
 
         const contaCorrente = await this.contaCorrenteCommand.inserir(
-            { agencia: '0001', conta: correntista.matricula!, idCorrentista: correntistaCriado.data?.id! });
+            { agencia: '0001', conta: correntistaCriado.data?.cpf!.substring(5), idCorrentista: correntistaCriado.data?.id! });
         if (!contaCorrente.success) {
             return { dados: correntista, mensagem: contaCorrente.messagens?.pop() };
         }

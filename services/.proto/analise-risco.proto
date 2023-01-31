@@ -15,7 +15,5 @@ message AnaliseRiscoResponse {
 }
 
 service AnaliseRisco {
-    rpc Analisar(AnaliseRiscoRequest) returns (AnaliseRiscoResponse) {
-        
-    }
+    rpc analisar(AnaliseRiscoRequest) returns (AnaliseRiscoResponse) { }
 }

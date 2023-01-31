@@ -1,19 +1,40 @@
-import { IAnaliseScoreContract } from "rsd-app-core/interfaces/analise-score.service.contract";
+import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
+import { loadSync } from '@grpc/proto-loader';
+import { IAnaliseRiscoService } from "rsd-app-core/interfaces/analise-risco.service";
+import { AnaliseRiscoRequest, AnaliseRiscoResponse } from "rsd-app-core/types/analise-riscos.types";
 
-export default class SerasaAdapterService implements IAnaliseScoreContract {
-    callAnaliseService(cpf: string, dataNascimento: Date, accessKey: string): any {
-        if (cpf.endsWith('1')) {
-            return { points: 900, cpf: cpf, dataNascimento: dataNascimento, consultaAt: new Date() };
-        } else if (cpf.endsWith('2')) {
-            return { points: 200, cpf: cpf, dataNascimento: dataNascimento, consultaAt: new Date() };
-        } else {
-            return { points: 0 };
-        }
+export default class SerasaAdapterService implements IAnaliseRiscoService {
+    client: any;
+
+    constructor() {
+        const packageDefinition = loadSync(
+            `${__dirname}/../../../../.proto/analise-risco.proto`,
+            {
+                keepCase: true,
+                longs: String,
+                enums: String,
+                defaults: true,
+                oneofs: true
+            });
+
+        const protoDescriptor = loadPackageDefinition(packageDefinition).rsdanaliserisco;
+        // @ts-ignore
+        this.client = new protoDescriptor.AnaliseRisco('localhost:50051',
+            credentials.createInsecure(), {
+            'grpc.keepalive_time_ms': 15000
+        });
     }
 
-    analise(props: { cpf: string, dataNascimento: Date }): number {
-        const result = this.callAnaliseService(props.cpf, props.dataNascimento, 'tdjigyfdgyfd9g7dfgfd97gdf967g');
-
-        return result.points;
+    async analisar(request: AnaliseRiscoRequest): Promise<AnaliseRiscoResponse> {
+        return new Promise((resolve, reject) => {
+            this.client.analisar({
+                cpf: request.cpf,
+                dataNascimento: request.dataNascimento
+            }, (err: any, response: any) => {
+                if (err)
+                    reject(err.message);
+                resolve(response);
+            });
+        })
     }
 }

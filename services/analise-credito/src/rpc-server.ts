@@ -2,7 +2,7 @@ import { loadPackageDefinition, Server, ServerCredentials } from '@grpc/grpc-js'
 import { loadSync } from '@grpc/proto-loader';
 
 const packageDefinition = loadSync(
-    `${__dirname}/../../../../.proto/analise-risco.proto`,
+    `${__dirname}/../../.proto/analise-risco.proto`,
     {
         keepCase: true,
         longs: String,
@@ -15,8 +15,14 @@ const protoDescriptor = loadPackageDefinition(packageDefinition);
 const rsdanaliserisco = protoDescriptor.rsdanaliserisco;
 
 function analiseRisco(dados: any) {
-    console.log('Teste');
-    return { cpf: dados.cpf, nome: 'fulano de tal', dataNascimento: dados.dataNascimento, score: 900 };
+    const resultado = {
+        cpf: dados.cpf,
+        nome: 'fulano de tal',
+        dataNascimento: dados.dataNascimento,
+        score: Math.trunc(Math.random() * 1000)
+    };
+    console.log(resultado);
+    return resultado;
 }
 
 function Analisar(call: any, callback: any) {

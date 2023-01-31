@@ -1,11 +1,13 @@
-import { IAnaliseScoreContract } from "../src/interfaces/analise-score.service.contract"
-import { IContaCorrenteCommand } from "../src/interfaces/conta-corrente.command"
-import { IContaCorrenteQuery } from "../src/interfaces/conta-corrente.query"
-import { ICorrentistaCommand } from "../src/interfaces/correntista.command"
-import { ContaCorrente } from "../src/models/conta-corrente.model"
-import { Correntista } from "../src/models/correntista.model"
-import { AberturaContaService } from "../src/services/abertura-conta.service"
-import { CoreResponse } from "../src/types/core.response"
+import { IAnaliseRiscoService } from "../src/interfaces/analise-risco.service";
+import { IContaCorrenteCommand } from "../src/interfaces/conta-corrente.command";
+import { IContaCorrenteQuery } from "../src/interfaces/conta-corrente.query";
+import { ICorrentistaCommand } from "../src/interfaces/correntista.command";
+import { ICorrentistaQuery } from "../src/interfaces/correntista.query";
+import { ContaCorrente } from "../src/models/conta-corrente.model";
+import { Correntista } from "../src/models/correntista.model";
+import { AberturaContaService } from "../src/services/abertura-conta.service";
+import { AnaliseRiscoRequest, AnaliseRiscoResponse } from "../src/types/analise-riscos.types";
+import { CoreResponse } from "../src/types/core.response";
 
 // parâmentros de entrada
 export const proponentes = {
@@ -19,22 +21,17 @@ export const proponentes = {
         cpf: '12345678902',
         dataNascimento: new Date(1984, 7, 8)
     }
-}
+};
 
 // Mock do serviço de análise de score
-export class SerasaScoreService implements IAnaliseScoreContract {
-    callAnaliseService(cpf: string, dataNascimento: Date, accessKey: string): any {
-        if (cpf === '12345678901') {
-            return { points: 900, cpf: cpf, dataNascimento: dataNascimento, consultaAt: new Date() }
-        } else if (cpf === '12345678902') {
-            return { points: 200, cpf: cpf, dataNascimento: dataNascimento, consultaAt: new Date() }
-        }
-    }
-
-    analise(props: { cpf: string, dataNascimento: Date }): number {
-        let result = this.callAnaliseService(props.cpf, props.dataNascimento, 'tdjigyfdgyfd9g7dfgfd97gdf967g')
-
-        return result.points
+export class SerasaScoreService implements IAnaliseRiscoService {
+    async analisar(request: AnaliseRiscoRequest): Promise<AnaliseRiscoResponse> {
+        return {
+            cpf: request.cpf,
+            dataNascimento: request.dataNascimento,
+            nome: 'Fulano de Tal',
+            score: request.cpf.endsWith('1') ? 900 : 200
+        };
     }
 }
 
@@ -51,6 +48,21 @@ export const correntistaCommand: ICorrentistaCommand = {
             correntistas.push(correntista);
             resolve({ success: true, data: correntista });
         })
+    }
+}
+
+export const correntistaQuery: ICorrentistaQuery = {
+    listarTodos: function (): Promise<CoreResponse<Correntista[]>> {
+        throw new Error("Function not implemented.");
+    },
+
+    buscarPorCpf: function (cpf: string): Promise<CoreResponse<Correntista>> {
+        return new Promise((resolve, reject) => {
+            resolve({
+                success: true,
+                data: undefined
+            });
+        });
     }
 }
 
@@ -79,4 +91,4 @@ export const contaCorrenteQuery: IContaCorrenteQuery = {
 
 // Instância do serviço
 export var correntistaService: AberturaContaService =
-    new AberturaContaService(correntistaCommand, contaCorrenteCommand, contaCorrenteQuery, new SerasaScoreService())
+    new AberturaContaService(correntistaCommand, correntistaQuery, contaCorrenteCommand, contaCorrenteQuery, new SerasaScoreService())
