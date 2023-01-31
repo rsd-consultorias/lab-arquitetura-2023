@@ -12,7 +12,7 @@ Para testar as integrações será definido o seguinte cenário de negócio:
 
 
 
-# Comandos do Kafka
+## Comandos do Kafka
 
 ``` bash
 # Iniciar serviço ZooKeeper
@@ -40,15 +40,18 @@ rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
 
 Para terminar os serviço basta tecla CTRL+C nos consoles abertos
 
+# Integração entre serviços com **gRPC**
+
 ## gRPC
 
 ## Comandos úteis
 
-### <b> Parar <i style='color: red'>Mongo DB</i>, pegar o PID e executar kill <PID>
 ``` bash
-ps aux | grep -v grep | grep mongod
+# <b> Parar um processo no unix, pegar o PID e executar kill
+ps aux | grep -v grep | grep <nome do processo>
+kill <PID>
 ```
 
 ## Referências
-[Apache Quick Start](https://kafka.apache.org/quickstart)
+[Apache Quick Start](https://kafka.apache.org/quickstart)<br />
 [gRPC](https://grpc.io/docs/languages/node/basics/)
