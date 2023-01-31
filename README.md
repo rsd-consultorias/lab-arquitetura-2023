@@ -41,5 +41,8 @@ rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
 
 Para terminar os serviço basta tecla CTRL+C nos consoles abertos
 
+## gRPC
+
 ## Referências
 [Apache Quick Start](https://kafka.apache.org/quickstart)
+[gRPC](https://grpc.io/docs/languages/node/basics/)

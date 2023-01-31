@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package rsdanaliserisco;
+
+message AnaliseRiscoRequest {
+    string cpf = 1;
+    string dataNascimento = 2;
+}
+
+message AnaliseRiscoResponse {
+    string cpf = 1;
+    string nome = 2;
+    string dataNascimento = 3;
+    int32 score = 4;
+}
+
+service AnaliseRisco {
+    rpc Analisar(AnaliseRiscoRequest) returns (AnaliseRiscoResponse) {
+        
+    }
+}

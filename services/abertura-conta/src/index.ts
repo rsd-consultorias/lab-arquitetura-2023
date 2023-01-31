@@ -13,6 +13,8 @@ import { CorrentistaRepository } from "./infra/repositories/correntista.reposito
 import { PubSub } from "./infra/services/message-broker.service";
 import SerasaAdapterService from "./infra/services/serasa.adapter.service";
 
+import './infra/rpc/rpc-server';
+
 export function initServer(port: number) {
     const sequelize = new Sequelize({
         dialect: 'sqlite',
@@ -46,7 +48,7 @@ export function initServer(port: number) {
     const httpServer = new ExpressHttpServerAdapter();
 
     // Registrar controllers
-    new AberturaContaController(httpServer, correntistaService);
+    new AberturaContaController(httpServer, correntistaService, contaCorrenteQuery);
 
     // Listener
     httpServer.listen(port);

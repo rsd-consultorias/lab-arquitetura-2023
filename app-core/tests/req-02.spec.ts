@@ -1,7 +1,7 @@
 import { assert } from "chai"
 import { Correntista } from "../src/models/correntista.model"
 import { MENSAGENS_PADRAO } from "../src/types/constants"
-import { resetCorrentistas, correntistaService, proponentes } from "./setup.spec"
+import { resetCorrentistas, correntistaService, proponentes } from "./setup"
 
 // CENÁRIOS
 describe('REQ02 - Análise de Score', () => {

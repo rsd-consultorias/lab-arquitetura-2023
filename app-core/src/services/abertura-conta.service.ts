@@ -1,5 +1,4 @@
 import { AnaliseScoreDomain } from "../domain-services/analise-score.domain";
-import { gerarMatricula } from "../domain-services/matricula.domain";
 import { IAnaliseScoreContract } from "../interfaces/analise-score.service.contract";
 import { IContaCorrenteCommand } from "../interfaces/conta-corrente.command";
 import { IContaCorrenteQuery } from "../interfaces/conta-corrente.query";
@@ -27,7 +26,6 @@ export class AberturaContaService {
         dataNascimento: Date
     }): Promise<{ dados: Correntista, mensagem?: string }> {
         let correntista: Correntista = makeCorrentistaFromProps(props);
-        correntista.matricula = gerarMatricula(props.cpf);
         correntista.score = this._analiseScoreDomain.analisar(props);
 
         if (correntista.score <= 200) {
@@ -53,7 +51,7 @@ export class AberturaContaService {
         return { success: true, data: undefined };
     }
 
-    async listarContas(): Promise<CoreResponse<ContaCorrente[]>> {
-        return await this.contaCorrenteQuery.listarTodas();
+    async processarRetornoAnaliseCredito(props: {}): Promise<CoreResponse<undefined>> {
+        return { success: true, data: undefined };
     }
 }
