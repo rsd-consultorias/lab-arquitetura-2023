@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import { IAnaliseRiscoService } from "../interfaces/analise-risco.service";
 import { IContaCorrenteCommand } from "../interfaces/conta-corrente.command";
 import { IContaCorrenteQuery } from "../interfaces/conta-corrente.query";
@@ -51,7 +52,7 @@ export class AberturaContaService {
         }
 
         const contaCorrente = await this.contaCorrenteCommand.inserir(
-            { agencia: '0001', conta: correntistaCriado.data?.cpf!.substring(5), idCorrentista: correntistaCriado.data?.id! });
+            { agencia: '0001', conta: v4(), idCorrentista: correntistaCriado.data?.id! });
         if (!contaCorrente.success) {
             return { dados: correntista, mensagem: contaCorrente.messagens?.pop() };
         }
@@ -63,7 +64,7 @@ export class AberturaContaService {
         return { success: true, data: undefined };
     }
 
-    async processarRetornoAnaliseCredito(props: {}): Promise<CoreResponse<undefined>> {
+    async finalizarProcesso(props: {}): Promise<CoreResponse<undefined>> {
         return { success: true, data: undefined };
     }
 }

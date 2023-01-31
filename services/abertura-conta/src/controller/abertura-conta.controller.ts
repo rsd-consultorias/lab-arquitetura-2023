@@ -13,6 +13,7 @@ export class AberturaContaController {
         readonly aberturaContaService: AberturaContaService,
         readonly contaCorrenteQuery: IContaCorrenteQuery,
         readonly correntistaQuery: ICorrentistaQuery) {
+
         this.httpServer.register(this.URL_API, 'post', async (params: ParamsDictionary, body: any) => {
             try {
                 return await this.aberturaContaService.iniciarProcesso(body);

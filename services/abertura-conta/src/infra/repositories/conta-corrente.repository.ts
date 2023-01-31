@@ -20,7 +20,7 @@ export class ContaCorrenteRepository {
                 allowNull: false
             },
             conta: {
-                type: DataTypes.STRING(6),
+                type: DataTypes.UUIDV4,
                 allowNull: false,
                 unique: true
             },

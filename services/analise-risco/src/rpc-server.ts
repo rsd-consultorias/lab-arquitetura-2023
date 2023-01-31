@@ -1,5 +1,6 @@
 import { loadPackageDefinition, Server, ServerCredentials } from '@grpc/grpc-js';
 import { loadSync } from '@grpc/proto-loader';
+import { analisarRiscoWorker } from './workers/analise-risco.worker';
 
 const packageDefinition = loadSync(
     `${__dirname}/../../.proto/analise-risco.proto`,
@@ -14,19 +15,14 @@ const packageDefinition = loadSync(
 const protoDescriptor = loadPackageDefinition(packageDefinition);
 const rsdanaliserisco = protoDescriptor.rsdanaliserisco;
 
-function analiseRisco(dados: any) {
-    const resultado = {
-        cpf: dados.cpf,
-        nome: 'fulano de tal',
-        dataNascimento: dados.dataNascimento,
-        score: Math.trunc(Math.random() * 1000)
-    };
+async function analiseRisco(dados: any) {
+    const resultado = await analisarRiscoWorker(dados);
     console.log(resultado);
     return resultado;
 }
 
-function Analisar(call: any, callback: any) {
-    callback(null, analiseRisco(call.request));
+async function Analisar(call: any, callback: any) {
+    callback(null, await analiseRisco(call.request));
 }
 
 function getServer() {
