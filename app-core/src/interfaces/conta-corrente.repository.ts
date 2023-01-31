@@ -1,8 +1,8 @@
 import { ContaCorrente } from "../models/conta-corrente.model";
-import { CQRSResponse } from "../types/cqrs.response";
+import { CoreResponse } from "../types/core.response";
 
 export interface IContaCorrenteRepository {
-    inserir(props: {agencia: string, conta: string, idCorrentista: string}): Promise<CQRSResponse<ContaCorrente>>;
+    inserir(props: {agencia: string, conta: string, idCorrentista: string}): Promise<CoreResponse<ContaCorrente>>;
 
-    listarTodas(): Promise<CQRSResponse<Array<ContaCorrente>>>;
+    listarTodas(): Promise<CoreResponse<Array<ContaCorrente>>>;
 }

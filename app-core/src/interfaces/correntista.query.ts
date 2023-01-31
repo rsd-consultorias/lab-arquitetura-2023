@@ -1,7 +1,7 @@
 import { Correntista } from "../models/correntista.model";
-import { CQRSResponse } from "../types/cqrs.response";
+import { CoreResponse } from "../types/core.response";
 
 export interface ICorrentistaQuery {
-    listarTodos(): Promise<CQRSResponse<Array<Correntista>>>;
-    buscarPorCpf(cpf: string): Promise<CQRSResponse<Correntista>>;
+    listarTodos(): Promise<CoreResponse<Array<Correntista>>>;
+    buscarPorCpf(cpf: string): Promise<CoreResponse<Correntista>>;
 }

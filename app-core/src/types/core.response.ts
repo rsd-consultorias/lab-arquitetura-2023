@@ -1,4 +1,4 @@
-export class CQRSResponse<T> {
+export class CoreResponse<T> {
 
     constructor(
         public success?: boolean,

@@ -2,24 +2,24 @@ import { AnaliseScoreDomain } from "../domain-services/analise-score.domain";
 import { gerarMatricula } from "../domain-services/matricula.domain";
 import { IAnaliseScoreContract } from "../interfaces/analise-score.service.contract";
 import { IContaCorrenteRepository } from "../interfaces/conta-corrente.repository";
-import { ICorrentistaRepository } from "../interfaces/correntista.repository";
+import { ICorrentistaCommand } from "../interfaces/correntista.command";
 import { ContaCorrente } from "../models/conta-corrente.model";
 import { Correntista } from "../models/correntista.model";
 import { MENSAGENS_PADRAO } from "../types/constants";
-import { CQRSResponse } from "../types/cqrs.response";
+import { CoreResponse } from "../types/core.response";
 import { makeCorrentistaFromProps } from "../utils/factories";
 
 export class AberturaContaService {
     private _analiseScoreDomain: AnaliseScoreDomain;
 
     constructor(
-        readonly _correntistaRepository: ICorrentistaRepository,
+        readonly _correntistaCommand: ICorrentistaCommand,
         readonly _contaCorrenteRepository: IContaCorrenteRepository,
         readonly _analiseScoreContract: IAnaliseScoreContract) {
         this._analiseScoreDomain = new AnaliseScoreDomain(this._analiseScoreContract);
     }
 
-    async cadastrarCorrentistaAsync(props: {
+    async gravarDadosFormularioAbertura(props: {
         nome: string,
         cpf: string,
         dataNascimento: Date
@@ -31,7 +31,7 @@ export class AberturaContaService {
         if (correntista.score <= 200) {
             return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0001 };
         }
-        const correntistaCriado = (await this._correntistaRepository.inserirCorrentistaAsync(correntista));
+        const correntistaCriado = (await this._correntistaCommand.inserir(correntista));
         correntista = correntistaCriado.data!;
 
         if (!correntistaCriado.success) {
@@ -47,7 +47,11 @@ export class AberturaContaService {
         return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0002 };
     }
 
-    async listarContas(): Promise<CQRSResponse<ContaCorrente[]>> {
+    async enviarParaAnaliseDeCredito(props: {}): Promise<CoreResponse<undefined>> {
+        return { success: true, data: undefined };
+    }
+
+    async listarContas(): Promise<CoreResponse<ContaCorrente[]>> {
         return await this._contaCorrenteRepository.listarTodas();
     }
 }

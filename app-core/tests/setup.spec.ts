@@ -1,9 +1,9 @@
 import { IAnaliseScoreContract } from "../src/interfaces/analise-score.service.contract"
 import { IContaCorrenteRepository } from "../src/interfaces/conta-corrente.repository"
-import { ICorrentistaRepository } from "../src/interfaces/correntista.repository"
+import { ICorrentistaCommand } from "../src/interfaces/correntista.command"
 import { Correntista } from "../src/models/correntista.model"
 import { AberturaContaService } from "../src/services/abertura-conta.service"
-import { CQRSResponse } from "../src/types/cqrs.response"
+import { CoreResponse } from "../src/types/core.response"
 
 // parâmentros de entrada
 export const proponentes = {
@@ -43,38 +43,25 @@ export function resetCorrentistas() {
 }
 
 // Mock do repositório
-export const correntistaRepository: ICorrentistaRepository = {
-    inserirCorrentistaAsync: function (correntista: Correntista): Promise<CQRSResponse<Correntista>> {
+export const correntistaCommand: ICorrentistaCommand = {
+    inserir: function (correntista: Correntista): Promise<CoreResponse<Correntista>> {
         return new Promise((resolve, reject) => {
-            correntistas.push(correntista)
-
-            resolve({ success: true, data: correntista })
+            correntistas.push(correntista);
+            resolve({ success: true, data: correntista });
         })
-    },
-    alterarCorrentistaAsync: function (correntista: Correntista): Promise<CQRSResponse<Correntista>> {
-        throw new Error("Function not implemented.")
-    },
-    excluirCorrentistaById: function (id: string): Promise<CQRSResponse<Correntista>> {
-        throw new Error("Function not implemented.")
-    },
-    buscarTodos: function (props: {}): Promise<Correntista[]> {
-        throw new Error("Function not implemented.")
-    },
-    buscarPorCpf: function (id: string): Promise<Correntista> {
-        throw new Error("Function not implemented.")
     }
 }
 
 export const contaCorrenteRepository: IContaCorrenteRepository = {
-    inserir: function (props: { agencia: string, conta: string, idCorrentista: string }): Promise<CQRSResponse<any>> {
+    inserir: function (props: { agencia: string, conta: string, idCorrentista: string }): Promise<CoreResponse<any>> {
         return new Promise((resolve, reject) => {
-            resolve({success: true, data: props})
+            resolve({success: true, data: props});
         })
     },
-    listarTodas: function (): Promise<CQRSResponse<any[]>> {
-        throw new Error("Function not implemented.")
+    listarTodas: function (): Promise<CoreResponse<any[]>> {
+        throw new Error("Function not implemented.");
     }
 }
 
 // Instância do serviço
-export var correntistaService: AberturaContaService = new AberturaContaService(correntistaRepository, contaCorrenteRepository, new SerasaScoreService())
+export var correntistaService: AberturaContaService = new AberturaContaService(correntistaCommand, contaCorrenteRepository, new SerasaScoreService())

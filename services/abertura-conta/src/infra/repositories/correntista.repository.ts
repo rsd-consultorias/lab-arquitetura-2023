@@ -1,10 +1,9 @@
-import { ICorrentistaRepository } from "rsd-app-core/interfaces/correntista.repository";
 import { Correntista } from "rsd-app-core/models/correntista.model";
-import { RepositoryResponse } from "rsd-app-core/types/repository.response";
 import { randomUUID } from 'crypto';
 import { DataTypes, Model, ModelCtor, Sequelize, UniqueConstraintError } from "sequelize";
+import { CoreResponse } from "rsd-app-core/types/core.response";
 
-export class CorrentistaRepository implements ICorrentistaRepository {
+export class CorrentistaRepository {
     private _repository: ModelCtor<Model<any, any>>;
 
     constructor(readonly sequelize: Sequelize) {
@@ -36,7 +35,7 @@ export class CorrentistaRepository implements ICorrentistaRepository {
         });
     }
 
-    async inserirCorrentistaAsync(correntista: Correntista): Promise<RepositoryResponse<Correntista>> {
+    async inserirCorrentistaAsync(correntista: Correntista): Promise<CoreResponse<Correntista>> {
         try {
             correntista.id = randomUUID();
             await this._repository.create({
@@ -54,14 +53,6 @@ export class CorrentistaRepository implements ICorrentistaRepository {
             }
             return { success: false, data: correntista, messagens: [`NÃO FOI POSSÍVEL GRAVAR O REGISTRO: [${error}]`] };
         }
-    }
-
-    alterarCorrentistaAsync(correntista: Correntista): Promise<RepositoryResponse<Correntista>> {
-        throw new Error("Method not implemented.");
-    }
-
-    excluirCorrentistaById(id: string): Promise<RepositoryResponse<Correntista>> {
-        throw new Error("Method not implemented.");
     }
 
     async buscarTodos(...arg: any[]): Promise<Correntista[]> {
@@ -83,9 +74,5 @@ export class CorrentistaRepository implements ICorrentistaRepository {
         });
 
         return result;
-    }
-
-    buscarPorCpf(id: string): Promise<Correntista> {
-        throw new Error("Method not implemented.");
     }
 }

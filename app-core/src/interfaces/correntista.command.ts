@@ -1,6 +1,6 @@
 import { Correntista } from "../models/correntista.model";
-import { CQRSResponse } from "../types/cqrs.response";
+import { CoreResponse } from "../types/core.response";
 
 export interface ICorrentistaCommand {
-    inserir(props: {}): Promise<CQRSResponse<Correntista>>;
+    inserir(correntista: Correntista): Promise<CoreResponse<Correntista>>;
 }
