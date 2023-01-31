@@ -1,7 +1,7 @@
 import { AnaliseScoreDomain } from "../domain-services/analise-score.domain";
 import { gerarMatricula } from "../domain-services/matricula.domain";
 import { IAnaliseScoreContract } from "../interfaces/analise-score.service.contract";
-import { IContaCorrenteRepository } from "../interfaces/conta-corrente.repository";
+import { IContaCorrenteCommand } from "../interfaces/conta-corrente.command";
 import { ICorrentistaCommand } from "../interfaces/correntista.command";
 import { ContaCorrente } from "../models/conta-corrente.model";
 import { Correntista } from "../models/correntista.model";
@@ -13,8 +13,8 @@ export class AberturaContaService {
     private _analiseScoreDomain: AnaliseScoreDomain;
 
     constructor(
-        readonly _correntistaCommand: ICorrentistaCommand,
-        readonly _contaCorrenteRepository: IContaCorrenteRepository,
+        readonly correntistaCommand: ICorrentistaCommand,
+        readonly contaCorrenteCommand: IContaCorrenteCommand,
         readonly _analiseScoreContract: IAnaliseScoreContract) {
         this._analiseScoreDomain = new AnaliseScoreDomain(this._analiseScoreContract);
     }
@@ -31,14 +31,14 @@ export class AberturaContaService {
         if (correntista.score <= 200) {
             return { dados: correntista, mensagem: MENSAGENS_PADRAO.CAD0001 };
         }
-        const correntistaCriado = (await this._correntistaCommand.inserir(correntista));
+        const correntistaCriado = (await this.correntistaCommand.inserir(correntista));
         correntista = correntistaCriado.data!;
 
         if (!correntistaCriado.success) {
             return { dados: correntista, mensagem: correntistaCriado.messagens?.pop() };
         }
 
-        const contaCorrente = await this._contaCorrenteRepository.inserir(
+        const contaCorrente = await this.contaCorrenteCommand.inserir(
             { agencia: '0001', conta: correntista.matricula!, idCorrentista: correntistaCriado.data?.id! });
         if (!contaCorrente.success) {
             return { dados: correntista, mensagem: contaCorrente.messagens?.pop() };
@@ -52,6 +52,6 @@ export class AberturaContaService {
     }
 
     async listarContas(): Promise<CoreResponse<ContaCorrente[]>> {
-        return await this._contaCorrenteRepository.listarTodas();
+        return await this.contaCorrenteCommand.listarTodas();
     }
 }

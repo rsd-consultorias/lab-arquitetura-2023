@@ -1,8 +1,10 @@
+import { IContaCorrenteCommand } from 'rsd-app-core/interfaces/conta-corrente.command';
 import { ICorrentistaCommand } from 'rsd-app-core/interfaces/correntista.command';
 import { AberturaContaService } from 'rsd-app-core/services/abertura-conta.service';
 import { Sequelize } from "sequelize";
 import { AberturaContaController } from "./controller/abertura-contar.controller";
 import { ExpressHttpServerAdapter } from "./express.http-server.adapter";
+import { ContaCorrenteCommand } from './infra/commands/conta-corrente.command';
 import { CorrentistaCommand } from './infra/commands/correntista.command';
 import { ContaCorrenteRepository } from "./infra/repositories/conta-corrente.repository";
 import { CorrentistaRepository } from "./infra/repositories/correntista.repository";
@@ -21,9 +23,12 @@ export function initServer(port: number) {
     // Dependencias
     const correntistaRepository: CorrentistaRepository = new CorrentistaRepository(sequelize);
     const contaCorrenteRepository: ContaCorrenteRepository = new ContaCorrenteRepository(sequelize);
-    const serasaService: SerasaAdapterService = new SerasaAdapterService();
+    
     const correntistaCommand: ICorrentistaCommand = new CorrentistaCommand(correntistaRepository);
-    const correntistaService: AberturaContaService = new AberturaContaService(correntistaCommand, contaCorrenteRepository, serasaService);
+    const contaCorrenteCommand: IContaCorrenteCommand = new ContaCorrenteCommand(contaCorrenteRepository);
+    
+    const serasaService: SerasaAdapterService = new SerasaAdapterService();
+    const correntistaService: AberturaContaService = new AberturaContaService(correntistaCommand, contaCorrenteCommand, serasaService);
 
     // Message broker
     const messageBroker = new PubSub();

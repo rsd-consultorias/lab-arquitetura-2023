@@ -1,6 +1,7 @@
 import { IAnaliseScoreContract } from "../src/interfaces/analise-score.service.contract"
-import { IContaCorrenteRepository } from "../src/interfaces/conta-corrente.repository"
+import { IContaCorrenteCommand } from "../src/interfaces/conta-corrente.command"
 import { ICorrentistaCommand } from "../src/interfaces/correntista.command"
+import { ContaCorrente } from "../src/models/conta-corrente.model"
 import { Correntista } from "../src/models/correntista.model"
 import { AberturaContaService } from "../src/services/abertura-conta.service"
 import { CoreResponse } from "../src/types/core.response"
@@ -52,16 +53,19 @@ export const correntistaCommand: ICorrentistaCommand = {
     }
 }
 
-export const contaCorrenteRepository: IContaCorrenteRepository = {
-    inserir: function (props: { agencia: string, conta: string, idCorrentista: string }): Promise<CoreResponse<any>> {
+export const contaCorrenteCommand: IContaCorrenteCommand = {
+    inserir: function (props: {}): Promise<CoreResponse<ContaCorrente>> {
         return new Promise((resolve, reject) => {
             resolve({success: true, data: props});
         })
     },
-    listarTodas: function (): Promise<CoreResponse<any[]>> {
-        throw new Error("Function not implemented.");
+    alterar: function (contaCorrente: ContaCorrente): Promise<CoreResponse<ContaCorrente>> {
+        throw new Error("Function not implemented.")
+    },
+    listarTodas: function (): Promise<CoreResponse<ContaCorrente[]>> {
+        throw new Error("Function not implemented.")
     }
 }
 
 // Instância do serviço
-export var correntistaService: AberturaContaService = new AberturaContaService(correntistaCommand, contaCorrenteRepository, new SerasaScoreService())
+export var correntistaService: AberturaContaService = new AberturaContaService(correntistaCommand, contaCorrenteCommand, new SerasaScoreService())

@@ -1,9 +1,8 @@
 import { randomUUID } from 'crypto';
-import { IContaCorrenteRepository } from "rsd-app-core/interfaces/conta-corrente.repository";
 import { RepositoryResponse } from "rsd-app-core/types/repository.response";
 import { DataTypes, Model, ModelCtor, Sequelize } from "sequelize";
 
-export class ContaCorrenteRepository implements IContaCorrenteRepository {
+export class ContaCorrenteRepository {
     private _repository: ModelCtor<Model<any, any>>;
 
     constructor(readonly sequelize: Sequelize) {
